@@ -36,7 +36,7 @@ def generate_booking_reference(booking_references):
 
 
 # Function to book a seat
-def book_seat(seats, row, col, booking_references,customer_data, name, age, contact):
+def book_seat(seats, row, col, booking_references, customer_data, name, age, contact):
     # checks if the seat is equal to F if true marks the seat as R and prints the seat number was booked successfully
     if seats[row][col] == 'F':
         # marks the seat as R
