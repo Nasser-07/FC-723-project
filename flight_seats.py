@@ -86,7 +86,7 @@ def main():
             col = ord(input("Enter column letter (A-H or S): ").upper()) - 65
             # cheks if the inputed position is valid and books the seat
             if 0 <= row < rows and (0 <= col < cols or col == ord('S') - 65):
-                book_seat(seats, row, col)
+                book_seat(seats, row, col,booking_references)
             else:
                 print("Invalid row or column.")
         elif choice == '3':
