@@ -1,3 +1,7 @@
+import random
+import string
+
+
 # Function to initialize the seat layout
 def initialize_seats(rows, cols):
 # this is initializing the seat layout by creating a 2D list of rows and columns and marking the aisles and storage areas by 'X' and 'S' respectively
@@ -23,18 +27,32 @@ def display_seats(seats):
     # prints the row and joins the row with a space
         print(" ".join(row))
 
+def generate_booking_reference(booking_references):
+    reference = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+    # this is to make sure that the reference is unique
+    while reference in booking_references:
+        reference = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+    return reference
+
+
 # Function to book a seat
-def book_seat(seats, row, col):
+def book_seat(seats, row, col, booking_references):
     # checks if the seat is equal to F if true marks the seat as R and prints the seat number was booked successfully
     if seats[row][col] == 'F':
         # marks the seat as R
         seats[row][col] = 'R'
-        
+        # defines the booking reference using a reference generator which is our helper function 
+        reference = generate_booking_reference(booking_references)
+        # adds the reference to the booking references list
+        booking_references.add(reference)
         # prints the seat number that was booked successfully
         print(f"Seat {row+1}{chr(col+65)} booked successfully.")
+        print(f"Generated booking reference: {reference}")
     else:
         # prints seat is already booked or invalid
         print("Seat is already booked or invalid.")
+
+
 
 # Main function
 def main():
@@ -42,6 +60,7 @@ def main():
     rows = 6
     cols = 80
     seats = initialize_seats(rows, cols)
+    booking_references = set()
 
     # while loop that runs the menu until the user decides to exit
     while True:
