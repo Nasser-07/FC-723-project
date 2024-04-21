@@ -36,7 +36,7 @@ def generate_booking_reference(booking_references):
 
 
 # Function to book a seat
-def book_seat(seats, row, col, booking_references):
+def book_seat(seats, row, col, booking_references,customer_data, name, age, contact):
     # checks if the seat is equal to F if true marks the seat as R and prints the seat number was booked successfully
     if seats[row][col] == 'F':
         # marks the seat as R
@@ -45,12 +45,25 @@ def book_seat(seats, row, col, booking_references):
         reference = generate_booking_reference(booking_references)
         # adds the reference to the booking references list
         booking_references.add(reference)
+        customer_data[reference] = {'Name': name, 'Age': age, 'Contact': contact}
         # prints the seat number that was booked successfully
         print(f"Seat {row+1}{chr(col+65)} booked successfully.")
         print(f"Generated booking reference: {reference}")
     else:
         # prints seat is already booked or invalid
         print("Seat is already booked or invalid.")
+
+def free_seat(seats, row, col, booking_references, customer_data):
+    if seats[row][col] == 'R':
+        seats[row][col] = 'F'
+        for reference, data in customer_data.items():
+            if data['Seat'] == (row, col):
+                del customer_data[reference]
+                print(f"Seat {row+1}{chr(col+65)} freed successfully.")
+                break
+    else:
+        print("Seat is already free or invalid.")
+     
 
 
 
@@ -61,6 +74,7 @@ def main():
     cols = 80
     seats = initialize_seats(rows, cols)
     booking_references = set()
+    customer_data = {}
 
     # while loop that runs the menu until the user decides to exit
     while True:
@@ -68,7 +82,8 @@ def main():
         print("\nMenu:")
         print("1. Display Seat Layout")
         print("2. Book a Seat")
-        print("3. Exit")
+        print("3. Free a Seat")
+        print("4. Exit")
         
         # takes an input by the user 
         choice = input("Enter your choice: ")
@@ -86,10 +101,20 @@ def main():
             col = ord(input("Enter column letter (A-H or S): ").upper()) - 65
             # cheks if the inputed position is valid and books the seat
             if 0 <= row < rows and (0 <= col < cols or col == ord('S') - 65):
-                book_seat(seats, row, col,booking_references)
+                name = input("Enter customer name: ")
+                age = input("Enter customer age: ")
+                contact = input("Enter customer contact: ")
+                book_seat(seats, row, col, booking_references, customer_data, name, age, contact)
             else:
                 print("Invalid row or column.")
         elif choice == '3':
+            row = int(input("Enter row number (1-6): ")) - 1
+            col = ord(input("Enter column letter (A-H or S): ").upper()) - 65
+            if 0 <= row < rows and (0 <= col < cols or col == ord('S') - 65):
+                free_seat(seats, row, col, booking_references, customer_data)
+            else:
+                print("Invalid row or column.")
+        elif choice =='4':
             # if user wants to leave breaks the looop and prints exiting program
             print("Exiting program.")
             break
